@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor} 
+
+\begin{document}
+	{\large IDBD-MGEN:}
+	
+	\medskip
+	
+	\textbf{Initialize:}
+	\begin{align*}
+		\eta & \equiv 0.001\\
+		\theta & \equiv  \theta_0\\
+		n_i^0 & \equiv 1, \quad \forall i = 1, \dots, d \\
+		w_i^0 & \equiv h_i^0 \equiv \nu_i^0 \equiv 0, \quad \forall i = 0, \dots, d \\
+		 \beta_i^0 & \equiv  \log \alpha_0, \quad \forall i = 0, \dots, d \\
+		%\textcolor{red}{\mathrm{prod}_\alpha^0} \,&\,\, \textcolor{red}{\equiv 1}
+	\end{align*}
+	
+	\textbf{For all $t = 1, 2, \dots$ do:}
+	
+	\textbf{Require:} Target $z^t \in \mathbb{R}$, inputs $x_i^t \in \mathbb{R}$
+	
+	
+	\begin{align}
+		\tilde{x}_i^t &\equiv \text{norm}(n_i^{t-1}, x_i^t) \quad \text{(This can be any normalization)} \\
+		y^t &\equiv \sum_{i=1}^d w_i^{t-1} \tilde{x}_i^t \\
+		\delta^t &\equiv z^t - y^t \\
+		g_i^t &\equiv \delta^t \tilde{x}_i^t h_i^{t-1} \quad \text{(meta gradient)} \\
+		\nu_i^t &\equiv \nu_i^{t-1} + \frac{\eta}{1 - (1 - \eta)^t} \left( g_i^t g_i^t - \nu_i^{t-1} \right) \\
+		\beta_i^t &\equiv \beta_i^{t-1} + \theta \frac{g_i^t}{\sqrt{\nu_i^t} + 1\text{e}^{-8}} \\
+		\alpha_i^t &\equiv \exp(\beta_i^t) \\
+		w_i^t &\equiv w_i^{t-1} + \alpha_i^t \delta^t \tilde{x}_i^t \\
+		h_i^t &\equiv h_i^{t-1} \cdot \max\left( 0,\ 1 - \alpha_i^t \tilde{x}_i^t\tilde{x}_i^t\right) + \alpha_i^t \delta^t \tilde{x}_i^t
+	\end{align}
+	
+	
+\end{document}
