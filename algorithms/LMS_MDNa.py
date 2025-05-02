@@ -65,8 +65,6 @@ class MDNa():
         self.var = 0.0
         self.t = 0
         self.epsilon = 1e-8
-        #self.eta_mu = eta0 +0.0
-        #self.eta_v = eta0 +0.0
         self.beta_mu = act_inv(eta0)
         self.beta_v = act_inv(eta0)
         self.h_mu = 0.0
@@ -80,30 +78,25 @@ class MDNa():
         eta_v = self.act(self.beta_v)
 
         if self.t==1:
-            self.mu = x + 0.0
-            mu = self.mu + 0.0
-            sigma = self.epsilon * np.ones_like(x)
+            self.mu = x
+            self.eta_mu_prod *= 1.0-eta_mu 
             x_tilde = np.zeros_like(x)
-            self.eta_mu_prod *= 1.0-eta_mu  
-            self.eta_v_prod *= 1.0-eta_v
-            return x_tilde, mu, sigma
-
-        mu = self.mu/(1-self.eta_mu_prod) # this is not present in the original MDN
+            sigma = self.epsilon * np.ones_like(x)
+            return x_tilde, self.mu, sigma
 
         self.eta_mu_prod *= 1.0-eta_mu  
         self.eta_v_prod *= 1.0-eta_v
         
-        self.var = self.var + eta_v*((x-mu)**2 - self.var) 
-        var_corrected = self.var / (1-self.eta_v_prod) # this is not present in the original MDN
-        sigma = np.clip(np.sqrt(var_corrected), a_min=self.epsilon, a_max=None)
-        x_tilde = (x-mu) /  sigma
-        self.mu = self.mu + eta_mu*(x-self.mu) 
+        self.var = self.var + eta_v*((x-self.mu)**2 - self.var) / (1-self.eta_v_prod)# (1-self.eta_v_prod) is not present in the original MDN
+        sigma = np.clip(np.sqrt(self.var), a_min=self.epsilon, a_max=None)
+        x_tilde = (x-self.mu) /  sigma
+        self.mu = self.mu + eta_mu*(x-self.mu) /(1-self.eta_mu_prod) # (1-self.eta_mu_prod) is not present in the original MDN
 
         self.beta_mu = self.beta_mu + self.theta *x_tilde *self.h_mu  * eta_mu*(1-eta_mu)
         self.beta_v = self.beta_v + self.theta *(x_tilde**2-1) *self.h_v  * eta_v*(1-eta_v)
         self.h_mu = (1-eta_mu)*self.h_mu + x_tilde 
         self.h_v = (1-eta_v)*self.h_v + (x_tilde**2-1)
-        return x_tilde, mu, sigma
+        return x_tilde, self.mu, sigma
 
 
 

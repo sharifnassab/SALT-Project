@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor} 
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+\begin{document}
+	{\large MDNPN:}
+	
+	\medskip
+	
+	
+	
+	\textbf{Initialize:}
+	\begin{align*}
+		h_1^\mu &\equiv  \nu_1  \equiv0 \\
+		\tilde{x}_1 & \equiv 0 \\
+		\mu_1 &\equiv x_1\\
+		\red{\beta_1^\mu} \,&\,\,  \red{ \equiv \log\big(\eta_1^\mu/(1-\eta_0^\mu)\big) , \qquad\textrm{(inverse of sigmoid)}} \\
+		\red{\beta_1^\nu} \,&\,\,  \red{\equiv \log\big(\eta_1^\nu/(1-\eta_0^\nu)\big) , \qquad \textrm{(inverse of sigmoid)}} \\
+		\red{\eta^{\mu, \mathrm{prod}}_0} \,&\,\,\red{ \equiv 1-\eta^\mu_1}\\
+		\red{\eta^{\nu, \mathrm{prod}}_0} \,&\,\,\red{ \equiv 1}
+	\end{align*}
+	
+	\textbf{For all $t \geq 2$:}
+	\begin{align}
+		\eta_t^\mu  &\equiv \frac{1}{1 + \exp(-\beta_{t-1}^\mu)} \\
+		\eta_t^\nu  &\equiv \frac{1}{1 + \exp(-\beta_{t-1}^\nu)} \\
+		\red{\eta^{\mu, \mathrm{prod}}_t} \,&\,\,\red{\equiv \eta^{\mu, \mathrm{prod}}_{t-1} \cdot (1 - \eta_{t}^\mu)} \\
+		\red{\eta^{\nu, \mathrm{prod}}_t} \,&\,\,\red{\equiv \eta^{\nu, \mathrm{prod}}_{t-1} \cdot (1 - \eta_{t}^\nu)} \\
+		\nu_t &= \nu_{t-1} + \eta_{t}^\nu \left( \left( \tilde{x}_t^2 - 1 \right)^2 - \nu_{t-1} \right) \red{ / (1 - \eta^{\nu, \mathrm{prod}}_t)}\\
+		\tilde{x}_t &\equiv \frac{x_t -\mu_{t-1}}{\max\left( \sqrt{\nu_t}, 1e^{-8} \right)}, \\
+		\mu_t &\equiv \mu_{t-1} + \eta_{t}^\mu (x_t - \mu_{t-1}) \red{/(1 - \eta^{\mu, \mathrm{prod}}_{t})} \\
+		v_t &\equiv v_{t-1} + \eta_t^ \nu \left(\left(\tilde{x}_t^2-1\right)^2 - v_{t-1}\right) \red{ / (1 - \eta^{\nu, \mathrm{prod}}_t)}  \\
+		\beta_t^\mu &\equiv \beta_{t-1}^\mu + \theta\, \tilde{x}_t\, h_{t-1}^\mu \sqrt{2 \eta_{t}^\mu - (\eta_{t}^\mu)^2} \\
+		\beta_t^\nu &\equiv \beta_{t-1}^\nu + \theta \frac{\tilde{x}_t^2 - 1}{\max\left( \sqrt{v_t }, 1e^{-8} \right)} h_{t-1}^\nu \sqrt{2 \eta_{t}^\nu - (\eta_{t}^\nu)^2} \\
+		h_t^\mu &\equiv (1 - \eta_{t}^\mu) h_{t-1}^\mu + \tilde{x}_t \\
+		h_t^\nu &\equiv (1 - \eta_{t}^\nu) h_{t-1}^\nu + \tilde{x}_t^2 -1
+	\end{align}
+	
+	
+	
+	
+	
+	
+
+\end{document}

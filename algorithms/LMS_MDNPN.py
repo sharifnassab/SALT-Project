@@ -79,32 +79,27 @@ class MDNPN():
         eta_v = self.act(self.beta_v)
 
         if self.t==1:
-            self.mu = x + 0.0
-            mu = self.mu + 0.0
-            sigma = self.epsilon * np.ones_like(x)
+            self.mu = x
+            self.eta_mu_prod *= 1.0-eta_mu 
             x_tilde = np.zeros_like(x)
-            self.eta_mu_prod *= 1.0-eta_mu
-            self.eta_v_prod *= 1.0-eta_v
-            return x_tilde, mu, sigma
-        
-        mu = self.mu if self.t==1 else self.mu/(1-self.eta_mu_prod) # this is not present in the original MDN
-        
+            sigma = self.epsilon * np.ones_like(x)
+            return x_tilde, self.mu, sigma
+                
         self.eta_mu_prod *= 1.0-eta_mu
         self.eta_v_prod *= 1.0-eta_v
         
-        self.var = self.var + eta_v*((x-mu)**2 - self.var) 
-        var_corrected = self.var / (1-self.eta_v_prod) # this is not present in the original MDNPN
-        sigma = np.clip(np.sqrt(var_corrected), a_min=self.epsilon, a_max=None)
-        x_tilde = (x-mu) /  sigma
-        self.mu = self.mu + eta_mu*(x-self.mu)
-        self.v = self.v + eta_v*((x_tilde**2-1)**2 - self.v)
-        v_corrected = self.v / (1-self.eta_v_prod) # this is not present in the original MDNPN
+        self.var = self.var + eta_v*((x-self.mu)**2 - self.var)  / (1-self.eta_v_prod)  # (1-self.eta_v_prod) is not present in the original MDNPN
+        sigma = np.clip(np.sqrt(self.var), a_min=self.epsilon, a_max=None)
+        x_tilde = (x-self.mu) /  sigma
+        self.mu = self.mu + eta_mu*(x-self.mu) / (1-self.eta_mu_prod) # (1-self.eta_mu_prod) is not present in the original MDNPN
+        self.v = self.v + eta_v*((x_tilde**2-1)**2 - self.v) / (1-self.eta_v_prod) # (1-self.eta_v_prod) is not present in the original MDNPN
+        #v_corrected = self.v / (1-self.eta_v_prod) # this is not present in the original MDNPN
 
         self.beta_mu = self.beta_mu + self.theta * np.sqrt(2*eta_mu-eta_mu**2) * x_tilde *self.h_mu 
-        self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(np.sqrt(v_corrected), a_min=self.epsilon, a_max=None)
+        self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(np.sqrt(self.v), a_min=self.epsilon, a_max=None)
         self.h_mu = (1-eta_mu)*self.h_mu + x_tilde 
         self.h_v = (1-eta_v)*self.h_v + (x_tilde**2-1)
-        return x_tilde, mu, sigma
+        return x_tilde, self.mu, sigma
 
 
 

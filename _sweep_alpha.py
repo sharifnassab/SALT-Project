@@ -16,8 +16,8 @@ from algorithms.LMS_MDNPN import param_sweeps as LMS_MDNPN_params
 from algorithms.LMS_MDNPN_KC import param_sweeps as LMS_MDNPN_KC_params
 
 
-num_parallel_processes = 2
-#num_parallel_processes = multiprocessing.cpu_count()-2
+#num_parallel_processes = 2
+num_parallel_processes = multiprocessing.cpu_count()-1
 
 ASH_dir = get_dir('ASH')
 RSS_dir = get_dir('RSS')

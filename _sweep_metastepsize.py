@@ -10,8 +10,8 @@ from algorithms.IDBD_MGEN import param_sweeps as IDBD_MGEN_params
 from algorithms.Normalized_IDBD import param_sweeps as Normalized_IDBD_params
 
 
-num_parallel_processes = 7
-#num_parallel_processes = multiprocessing.cpu_count()-2
+#num_parallel_processes = 7
+num_parallel_processes = multiprocessing.cpu_count()-1
 
 ASH_dir = get_dir('ASH')
 RSS_dir = get_dir('RSS')

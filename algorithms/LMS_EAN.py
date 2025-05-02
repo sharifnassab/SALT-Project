@@ -66,13 +66,13 @@ class EAN():
             sigma = self.epsilon * np.ones_like(x)
             x_tilde = np.zeros_like(x)
         else:
-            coeff1 = self.eta/(1-(1-self.eta)**(self.t-1))
-            coeff2 = self.eta/(1-(1-self.eta)**self.t)
-            self.var = self.var + coeff1*((x-self.mu)**2 - self.var) 
+            coeff_var = self.eta/(1-(1-self.eta)**(self.t-1))
+            coeff_mu = self.eta/(1-(1-self.eta)**self.t)
+            self.var = self.var + coeff_var*((x-self.mu)**2 - self.var) 
             mu = self.mu+0.0
             sigma = np.clip(np.sqrt(self.var), a_min=self.epsilon, a_max=None)
             x_tilde = (x-mu) /  sigma
-            self.mu = self.mu + coeff2*(x-self.mu)
+            self.mu = self.mu + coeff_mu*(x-self.mu)
         return x_tilde, mu, sigma
 
 

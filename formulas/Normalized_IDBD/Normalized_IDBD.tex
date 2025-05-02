@@ -3,6 +3,9 @@
 \usepackage{amssymb}
 \usepackage{xcolor} 
 
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
 \begin{document}
 	{\large Normalized IDBD:}
 	
@@ -14,7 +17,7 @@
 		\eta & \equiv 1, \quad N^0 \equiv 0, \quad \theta \equiv \frac{\theta_0}{d+1} \\
 		w_i^0 & \equiv h_i^0 \equiv \beta_i^0 \equiv 0, \quad \forall i = 0, \dots, d \\
 		\alpha_{d+1}^0 & \equiv 0, \quad \beta_{d+1}^0 \equiv \log(\kappa), \quad \kappa = d + 1 \\
-		\textcolor{red}{\mathrm{prod}_\alpha^0} \,&\,\, \textcolor{red}{\equiv 1}
+		\red{\mathrm{prod}_\alpha^0} \,&\,\, \red{\equiv 1}
 	\end{align*}
 	
 	\textbf{For all $t = 1, 2, \dots$ do:}
@@ -25,10 +28,10 @@
 		\tilde{x}_0^t & \equiv 1, \quad \tilde{x}_i^t \equiv \text{norm}(n_i^{t-1}, x_i^t), \quad \forall i = 1, \dots, d \\
 		y^t & \equiv \sum_{i=0}^d w_i^{t-1} \tilde{x}_i^t \\
 		\delta^t & \equiv z^t - y^t \\
-		N^t & \equiv N^{t-1} + \left(1 - \alpha_{d+1}^{t-1}\right)\left( (\delta^t)^2 - N^{t-1} \right) \\
-		\textcolor{red}{\mathrm{prod}_\alpha^t} \,&\,\, \textcolor{red}{\equiv \mathrm{prod}_\alpha^{t-1} \cdot \alpha_{d+1}^{t-1}} \\
-		%\textcolor{red}{\bar{N}^t} \,&\,\, \textcolor{red}{\equiv \frac{N^t}{1 - \mathrm{prod}_\alpha^t}} \\
-		\tilde{\delta}_t & \equiv \frac{\delta^t}{\max\left( \sqrt{N^t/\textcolor{red}{(1 - \mathrm{prod}_\alpha^t)}}, 1e^{-8} \right)} \\
+		\red{\mathrm{prod}_\alpha^t} \,&\,\, \red{\equiv \mathrm{prod}_\alpha^{t-1} \cdot \alpha_{d+1}^{t-1}} \\
+		N^t & \equiv N^{t-1} + \left(1 - \alpha_{d+1}^{t-1}\right)\left( \delta^t\delta^t - N^{t-1} \right) \red{/(1 - \mathrm{prod}_\alpha^t)} \\
+		%\red{\bar{N}^t} \,&\,\, \red{\equiv \frac{N^t}{1 - \mathrm{prod}_\alpha^t}} \\
+		\tilde{\delta}_t & \equiv \frac{\delta^t}{\max\left( \sqrt{N^t}, 1e^{-8} \right)} \\
 		\beta_i^t & \equiv \beta_i^{t-1} + \theta \tilde{x}_i^t \tilde{\delta}_t h_i^{t-1} \sqrt{2 \alpha_i^{t-1} - (\alpha_i^{t-1})^2}, \quad \forall i = 0, \dots, d \\
 		\alpha_i^t & \equiv \frac{\exp(\beta_i^t)}{\sum_{j=0}^{d+1} \exp(\beta_j^t)}, \quad \forall i = 0, \dots, d+1 \\
 			w_i^t & \equiv w_i^{t-1} + \alpha_i^t \tilde{\delta}_t \tilde{x}_i^t, \quad \forall i = 0, \dots, d\\

@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 from adjustText import adjust_text
 
-csv_file = 'csvs/for_plotting5_modified.csv'
+csv_file = 'csvs/results_.csv'
 x_scale = "log"
 
 dataset_info = [
@@ -25,11 +25,7 @@ dataset_info = [
 
 
 algorithms = [
-    # {"Alg":"LMS", "Model":"affine", "Params":{}, "x_axis":"alpha"},
-    #{"Alg":"LMS-MDN", "Model":"affine", "Params":{"theta":0.001}, "x_axis":"alpha"},
-    {"Alg":"LMS-MDNsqrtEta", "Model":"affine", "Params":{"theta":0.001}, "x_axis":"alpha"},
-    # {"Alg":"LMS-MDNa", "Model":"affine", "Params":{"theta":0.001}, "x_axis":"alpha"},
-    # {"Alg":"Newton", "Model":"affine", "Params":{'gamma':.999}, "x_axis":"alpha"},
+    {"Alg":"LMS_MDNPN_KC^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
 ]
 
 
@@ -209,7 +205,7 @@ def plot_curves(csv_file, algorithm, csv_column_numbers, datasets, x_scale='line
     plt.yticks(fontsize = fontsize['axes_numbers'])
     plt.title(title, fontsize=fontsize['title'])
     
-    plt.savefig(f'figs/{dataset['name']}.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'plots/{dataset['name']}.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 

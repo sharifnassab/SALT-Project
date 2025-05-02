@@ -79,33 +79,29 @@ class MDNPN_KC():
         eta_v = self.act(self.beta_v)
 
         if self.t==1:
-            self.mu = x + 0.0
-            mu = self.mu + 0.0
-            sigma = self.epsilon * np.ones_like(x)
+            self.mu = x
+            self.eta_mu_prod *= 1.0-eta_mu 
             x_tilde = np.zeros_like(x)
-            self.eta_mu_prod *= 1.0-eta_mu
-            self.eta_v_prod *= 1.0-eta_v
-            return x_tilde, mu, sigma
-        
-        mu = self.mu/(1-self.eta_mu_prod) # this is not present in the original MDN
+            sigma = self.epsilon * np.ones_like(x)
+            return x_tilde, self.mu, sigma
         
         self.eta_mu_prod *= 1.0-eta_mu
-        eta_v_correction = 1-self.eta_v_prod*(1-eta_v/2)
+        eta_v_correction_for_u = 1-self.eta_v_prod*(1-eta_v/2)
         self.eta_v_prod *= 1.0-eta_v
         
-        u = ( self.var + (eta_v/2)*((x-mu)**2 - self.var) ) / eta_v_correction
-        self.var = self.var + eta_v*((x-mu)**2 - self.var) 
+        u = ( self.var + (eta_v/2)*((x-self.mu)**2 - self.var) ) / eta_v_correction_for_u
+        self.var = self.var + eta_v*((x-self.mu)**2 - self.var) / (1-self.eta_v_prod) 
         sigma = np.clip(np.sqrt(u), a_min=self.epsilon, a_max=None)
-        x_tilde = (x-mu) /  sigma
-        self.mu = self.mu + eta_mu*(x-self.mu)
-        u2 = (self.v + (eta_v/2)*((x_tilde**2-1)**2 - self.v) ) / eta_v_correction
-        self.v = self.v + eta_v*((x_tilde**2-1)**2 - self.v)
+        x_tilde = (x-self.mu) /  sigma
+        self.mu = self.mu + eta_mu*(x-self.mu) /(1-self.eta_mu_prod) 
+        u2 = (self.v + (eta_v/2)*((x_tilde**2-1)**2 - self.v) ) / eta_v_correction_for_u
+        self.v = self.v + eta_v*((x_tilde**2-1)**2 - self.v) / (1-self.eta_v_prod) 
         
         self.beta_mu = self.beta_mu + self.theta * np.sqrt(2*eta_mu-eta_mu**2) * x_tilde *self.h_mu 
         self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(np.sqrt(u2), a_min=self.epsilon, a_max=None)
         self.h_mu = (1-eta_mu)*self.h_mu + x_tilde 
         self.h_v = (1-eta_v)*self.h_v + (x_tilde**2-1) 
-        return x_tilde, mu, sigma
+        return x_tilde, self.mu, sigma
 
 
 

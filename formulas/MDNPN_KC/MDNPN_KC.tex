@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor} 
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+\begin{document}
+	{\large MDNPN\_KC:}
+	
+	\medskip
+	
+	
+	
+	\textbf{Initialize:}
+	\begin{align*}
+		h_1^\mu &\equiv  \nu_1  \equiv0 \\
+		\tilde{x}_1 & \equiv 0 \\
+		\mu_1 &\equiv x_1\\
+		{\beta_1^\mu} \,&\,\,  { \equiv \log\big(\eta_1^\mu/(1-\eta_0^\mu)\big) , \qquad\textrm{(inverse of sigmoid)}} \\
+		{\beta_1^\nu} \,&\,\,  {\equiv \log\big(\eta_1^\nu/(1-\eta_0^\nu)\big)} \\
+		{\eta^{\mu, \mathrm{prod}}_0} \,&\,\,{ \equiv 1-\eta^\mu_1}\\
+		{\eta^{\nu, \mathrm{prod}}_0} \,&\,\,{ \equiv 1}
+	\end{align*}
+	
+	\textbf{For all $t \geq 2$:}
+	\begin{align}
+		\eta_t^\mu  &\equiv \frac{1}{1 + \exp(-\beta_{t-1}^\mu)} \\
+		\eta_t^\nu  &\equiv \frac{1}{1 + \exp(-\beta_{t-1}^\nu)} \\
+		{\eta^{\mu, \mathrm{prod}}_t} \,&\,\,{\equiv \eta^{\mu, \mathrm{prod}}_{t-1} \cdot (1 - \eta_{t}^\mu)} \\
+		c_t & \equiv 1-\eta^{\nu, \mathrm{prod}}_{t-1} \cdot (1 - \eta_{t}^\nu/2)\\
+		{\eta^{\nu, \mathrm{prod}}_t} \,&\,\,{\equiv \eta^{\nu, \mathrm{prod}}_{t-1} \cdot (1 - \eta_{t}^\nu)} \\
+		u^\nu_t &= \nu_{t-1} + \frac{\eta_{t}^\nu}2 \left( \left( \tilde{x}_t^2 - 1 \right)^2 - \nu_{t-1} \right) { / c_t}\\
+		\nu_t &= \nu_{t-1} + \eta_{t}^\nu \left( \left( \tilde{x}_t^2 - 1 \right)^2 - \nu_{t-1} \right) { / (1 - \eta^{\nu, \mathrm{prod}}_t)}\\
+		\tilde{x}_t &\equiv \frac{x_t -\mu_{t-1}}{\max\left( \sqrt{u^\nu_t}, 1e^{-8} \right)}, \\
+		\mu_t &\equiv \mu_{t-1} + \eta_{t}^\mu (x_t - \mu_{t-1}) {/(1 - \eta^{\mu, \mathrm{prod}}_{t})} \\
+		u^v_t &\equiv v_{t-1} + \frac{\eta_t^ \nu}2 \left(\left(\tilde{x}_t^2-1\right)^2 - v_{t-1}\right) { / c_t}  \\
+		v_t &\equiv v_{t-1} + \eta_t^ \nu \left(\left(\tilde{x}_t^2-1\right)^2 - v_{t-1}\right) { / (1 - \eta^{\nu, \mathrm{prod}}_t)}  \\
+		\beta_t^\mu &\equiv \beta_{t-1}^\mu + \theta\, \tilde{x}_t\, h_{t-1}^\mu \sqrt{2 \eta_{t}^\mu - (\eta_{t}^\mu)^2} \\
+		\beta_t^\nu &\equiv \beta_{t-1}^\nu + \theta \frac{\tilde{x}_t^2 - 1}{\max\left( \sqrt{u^v_t }, 1e^{-8} \right)} h_{t-1}^\nu \sqrt{2 \eta_{t}^\nu - (\eta_{t}^\nu)^2} \\
+		h_t^\mu &\equiv (1 - \eta_{t}^\mu) h_{t-1}^\mu + \tilde{x}_t \\
+		h_t^\nu &\equiv (1 - \eta_{t}^\nu) h_{t-1}^\nu + \tilde{x}_t^2 -1
+	\end{align}
+	
+	
+	
+	
+	
+	
+
+\end{document}
