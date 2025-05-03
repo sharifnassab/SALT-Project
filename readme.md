@@ -36,13 +36,13 @@ python3 algorithms/LMS.py
 
 Alternatively, perform parameter sweeps:
 
-* For Base algorithms (LMS, LMS\_MDN, ...):
+* Sweep Base algorithms (LMS, LMS\_MDN, ...):
 
 ```bash
 python3 _sweep_alpha.py
 ```
 
-* For Meta algorithms (IDBD, ...):
+* Sweep Meta algorithms (IDBD, ...):
 
 ```bash
 python3 _sweep_metastepsize.py
