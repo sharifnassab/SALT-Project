@@ -45,7 +45,7 @@ python3 _sweep_alpha.py
 * For Meta algorithms (IDBD, ...):
 
 ```bash
-python3 _plot_from_CSV_across_datasets.py
+python3 _sweep_metastepsize.py
 ```
 
 **Output:**
