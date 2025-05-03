@@ -3,7 +3,7 @@
 - [Repository Setup](#Repository-Setup)
 - [Running the Algorithms and Sweeping](#running-the-algorithms-and-sweeping)
 - [Plotting Results](#plotting-results)
-- [Formulas of Implemented Algorithms (highlighting differences from the SALT document)](Formulas-of-Implemented-Algorithms-(click-to-expand))
+- [Formulas of Implemented Algorithms (highlighting differences from the SALT document)](Formulas-of-Implemented-Algorithms-click-to-expand)
 
 
 ---
