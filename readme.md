@@ -1,10 +1,9 @@
-## Contents:
-- About Salt Project
-- Repository Setup
-- Running the Algorithms and Sweeping
-- Plotting Results
-- Formulas of Implemented Algorithms (highlighting the implementation details that differ from the SALT document)
-
+## Table of Contents:
+- [About Salt Project](#SALT-Project-Algorithms)
+- [Repository Setup](#Repository-Setup)
+- [Running the Algorithms and Sweeping](#running-the-algorithms-and-sweeping)
+- [Plotting Results](#plotting-results)
+- [Formulas of Implemented Algorithms (highlighting differences from the SALT document)](Formulas-of-Implemented-Algorithms-(click-to-expand))
 
 
 ---
