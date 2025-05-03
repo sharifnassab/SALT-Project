@@ -18,7 +18,7 @@ The SALT challenge involves building the best possible **Streaming Affine Learni
 
 ## Repository Setup
 
-After pulling this repository, download the datasets from [this Google Doc](https://drive.google.com/drive/folders/1-d8JJlxin4qWpQrAzXgs17ndkR8Gil_m) to the `data` directory:
+After pulling this repository, download the datasets from [this Google Drive](https://drive.google.com/drive/folders/1-d8JJlxin4qWpQrAzXgs17ndkR8Gil_m) to the `data` directory:
 
 ```bash
 gdown --folder https://drive.google.com/drive/folders/1-d8JJlxin4qWpQrAzXgs17ndkR8Gil_m
