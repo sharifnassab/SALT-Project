@@ -2,8 +2,8 @@
 - [About Salt Project](#SALT-Project-Algorithms)
 - [Repository Setup](#Repository-Setup)
 - [Running the Algorithms and Sweeping](#running-the-algorithms-and-sweeping)
-- [Plotting Results](#plotting-results)
-- [Formulas of Implemented Algorithms (highlighting differences from the SALT document)](Formulas-of-Implemented-Algorithms-click-to-expand)
+- [Plotting the Results](#plotting-the-results)
+- [Formulas of Implemented Algorithms (highlighting differences from the SALT document)](#Formulas-of-Implemented-Algorithms-click-to-expand)
 
 
 ---
@@ -53,7 +53,7 @@ Each run generates a `.csv` file stored in the `csv` directory. If a CSV already
 
 ---
 
-## Plotting Results
+## Plotting the Results
 
 To visualize the results from CSV files:
 
