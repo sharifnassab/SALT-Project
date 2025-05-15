@@ -16,8 +16,8 @@ from algorithms.LMS_MDNPN import param_sweeps as LMS_MDNPN_params
 from algorithms.LMS_MDNPN_KC import param_sweeps as LMS_MDNPN_KC_params
 
 
-#num_parallel_processes = 2
-num_parallel_processes = multiprocessing.cpu_count()-1
+num_parallel_processes = 4
+#num_parallel_processes = multiprocessing.cpu_count()-1
 
 ASH_dir = get_dir('ASH')
 RSS_dir = get_dir('RSS')
@@ -52,17 +52,17 @@ if __name__=='__main__':
                   list(10**(np.linspace(start=-8, stop=.5, num=int(8.5/.5) +1)))]
 
     dataset_list = [
-                    'SALTdata-RSS1-20-1100000.txt',
-                    #'SALTdata-RSS5-20-1100000.txt',
-                    #'SALTdata-RSS6-20-1100000.txt',
-                    #'SALTdata-RSS7-20-1100000.txt',
-                    #'SALTdata-ASH5-16-1100000.txt',
-                    #'SALTdata-ASH6-20-1100000.txt',
-                    #'SALTdata-ASH7-30-1100000.txt',
-                    #'SALTdata-ASH9-1-1100000.txt',
-                    #'SALTdata-ASH10-5-1100000.txt',
-                    #'SALTdata-ASH11-4-1100000.txt',
-                    #'SALTdata-ASH12-5-1100000.txt'
+                    #'SALTdata-RSS1-20-1100000.txt',
+                    'SALTdata-RSS5-20-1100000.txt',
+                    'SALTdata-RSS6-20-1100000.txt',
+                    'SALTdata-RSS7-20-1100000.txt',
+                    'SALTdata-ASH5-16-1100000.txt',
+                    'SALTdata-ASH6-20-1100000.txt',
+                    'SALTdata-ASH7-30-1100000.txt',
+                    'SALTdata-ASH9-1-1100000.txt',
+                    'SALTdata-ASH10-5-1100000.txt',
+                    'SALTdata-ASH11-4-1100000.txt',
+                    'SALTdata-ASH12-5-1100000.txt'
                     ]
 
     command_list = []
@@ -70,14 +70,14 @@ if __name__=='__main__':
     for alg_params in [
                         Adam_params(),
                         Newton_params(),
-                        NAD_SAN_params(),
-                        NAD_EAN_params(),
+                        #NAD_SAN_params(),
+                        #NAD_EAN_params(),
                         LMS_params(),
-                        LMS_SAN_params(),
+                        #LMS_SAN_params(),
                         LMS_EAN_params(),
-                        LMS_MDN_params(),
-                        LMS_MDNa_params(),
-                        LMS_MDNPN_params(),
+                        #LMS_MDN_params(),
+                        #LMS_MDNa_params(),
+                        #LMS_MDNPN_params(),
                         LMS_MDNPN_KC_params(),
                         ]:
         alg_params = replace_sweep_of_a_variable(alg_params, new_param_name='alpha', list_new_param=list_alpha)

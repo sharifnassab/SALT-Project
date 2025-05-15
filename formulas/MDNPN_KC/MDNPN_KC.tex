@@ -38,7 +38,7 @@
 		u^v_t &\equiv v_{t-1} + \frac{\eta_t^ \nu}2 \left(\left(\tilde{x}_t^2-1\right)^2 - v_{t-1}\right) { / c_t}  \\
 		v_t &\equiv v_{t-1} + \eta_t^ \nu \left(\left(\tilde{x}_t^2-1\right)^2 - v_{t-1}\right) { / (1 - \eta^{\nu, \mathrm{prod}}_t)}  \\
 		\beta_t^\mu &\equiv \beta_{t-1}^\mu + \theta\, \tilde{x}_t\, h_{t-1}^\mu \sqrt{2 \eta_{t}^\mu - (\eta_{t}^\mu)^2} \\
-		\beta_t^\nu &\equiv \beta_{t-1}^\nu + \theta \frac{\tilde{x}_t^2 - 1}{\max\left( \sqrt{u^v_t }, 1e^{-8} \right)} h_{t-1}^\nu \sqrt{2 \eta_{t}^\nu - (\eta_{t}^\nu)^2} \\
+		\beta_t^\nu &\equiv \beta_{t-1}^\nu + \theta \frac{\tilde{x}_t^2 - 1}{\max\left( u^v_t , 1e^{-8} \right)} h_{t-1}^\nu \sqrt{2 \eta_{t}^\nu - (\eta_{t}^\nu)^2} \\
 		h_t^\mu &\equiv (1 - \eta_{t}^\mu) h_{t-1}^\mu + \tilde{x}_t \\
 		h_t^\nu &\equiv (1 - \eta_{t}^\nu) h_{t-1}^\nu + \tilde{x}_t^2 -1
 	\end{align}

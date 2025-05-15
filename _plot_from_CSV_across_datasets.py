@@ -13,19 +13,46 @@ dataset_info = [
     {'name':'RSS5', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 27.0},
     {'name':'RSS6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 28.0},
     {'name':'RSS7', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 23.0},
-    #{'name':'ASH5', "dim":16, 'From':'900k', "To":"1.1m", "ylim_max": 43.0},
-    #{'name':'ASH6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 40.0},
-    #{'name':'ASH7', "dim":30, 'From':'900k', "To":"1.1m", "ylim_max": 50.0},
-    #{'name':'ASH9', "dim":1, 'From':'900k', "To":"1.1m", "ylim_max": 24.0},
-    ##{'name':'ASH10', "dim":5, 'From':'900k', "To":"1.1m"},
-    ##{'name':'ASH11', "dim":4, 'From':'900k', "To":"1.1m", "ylim_max": 100.0},
-    #{'name':'ASH12', "dim":5, 'From':'900k', "To":"1.1m", "ylim_max": 60.0},
+    {'name':'ASH5', "dim":16, 'From':'900k', "To":"1.1m", "ylim_max": 43.0},
+    {'name':'ASH6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 40.0},
+    {'name':'ASH7', "dim":30, 'From':'900k', "To":"1.1m", "ylim_max": 50.0},
+    {'name':'ASH9', "dim":1, 'From':'900k', "To":"1.1m", "ylim_max": 24.0},
+    #{'name':'ASH10', "dim":5, 'From':'900k', "To":"1.1m"},
+    #{'name':'ASH11', "dim":4, 'From':'900k', "To":"1.1m", "ylim_max": 100.0},
+    {'name':'ASH12', "dim":5, 'From':'900k', "To":"1.1m", "ylim_max": 60.0},
 ]
 
 
 
 algorithms = [
-    {"Alg":"LMS_MDNPN_KC^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    {"Alg":"Adam", "Model":"affine", "Params":{"beta_nu":0.999, "beta_m":0.9}, "x_axis":"alpha"},
+    {"Alg":"Newton", "Model":"affine", "Params":{"gamma":0.9999}, "x_axis":"alpha"},
+    #{"Alg":"NAD-SAN", "Model":"affine", "Params":{}, "x_axis":"alpha"},
+    #{"Alg":"NAD-EAN", "Model":"affine", "Params":{"tau":100}, "x_axis":"alpha"},
+    {"Alg":"LMS", "Model":"affine", "Params":{}, "x_axis":"alpha"},
+    #{"Alg":"LMS-SAN", "Model":"affine", "Params":{}, "x_axis":"alpha"},
+    {"Alg":"LMS-EAN", "Model":"affine", "Params":{"tau":100}, "x_axis":"alpha"},
+    #{"Alg":"LMS-MDN", "Model":"affine", "Params":{"theta":0.001}, "x_axis":"alpha"},
+    #{"Alg":"LMS-MDNa", "Model":"affine", "Params":{"theta":0.01}, "x_axis":"alpha"},
+    #{"Alg":"LMS-MDNPN", "Model":"affine", "Params":{"theta":0.01}, "x_axis":"alpha"},
+    {"Alg":"LMS-MDNPN_KC", "Model":"affine", "Params":{"theta":0.01, "eta0":0.001}, "x_axis":"alpha"},
+    
+    {"Alg":"IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"IDBD2", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    
+    #{"Alg":"LMS^IDBD_MGEN", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_EAN^IDBD_MGEN", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_MDN^IDBD_MGEN", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_MDNa^IDBD_MGEN", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_MDNPN^IDBD_MGEN", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    {"Alg":"LMS_MDNPN_KC^IDBD_MGEN", "Model":"affine", "Params":{"meta_eta":0.001, "alpha0":1e-05, "base.eta0":0.001, "base.theta_MDN":0.01}, "x_axis":"metastep"},
+    
+    #{"Alg":"LMS^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_EAN^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_MDN^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_MDNa^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    #{"Alg":"LMS_MDNPN^Normalized_IDBD", "Model":"affine", "Params":{}, "x_axis":"metastep"},
+    {"Alg":"LMS_MDNPN_KC^Normalized_IDBD", "Model":"affine", "Params":{"alpha0":1e-05, "base.eta0":0.001, "base.theta_MDN":0.01}, "x_axis":"metastep"},
 ]
 
 
@@ -197,7 +224,7 @@ def plot_curves(csv_file, algorithm, csv_column_numbers, datasets, x_scale='line
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=1, fontsize=fontsize['detailed_legend'])
     distributed_legend(curves=curves, lines=lines, y_max=dataset['ylim_max']-1, legend_fontsize=fontsize['in_figure_legend'])
 
-    plt.xlabel(' / '.join(sorted(list(set([exp['x_axis'] for exp in algorithms])))), fontsize=fontsize['axes'])
+    plt.xlabel(algorithm['x_axis'], fontsize=fontsize['axes'])
     plt.ylabel('RMSE', fontsize=fontsize['axes'])
     title = ( f"{algorithm['Alg']}   {algorithm['Params']}"
              f" ({dataset['From']}--{dataset['To']})")
@@ -205,7 +232,7 @@ def plot_curves(csv_file, algorithm, csv_column_numbers, datasets, x_scale='line
     plt.yticks(fontsize = fontsize['axes_numbers'])
     plt.title(title, fontsize=fontsize['title'])
     
-    plt.savefig(f'plots/{dataset['name']}.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'plots/{algorithm['Alg']}.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 

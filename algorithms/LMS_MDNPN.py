@@ -96,7 +96,7 @@ class MDNPN():
         #v_corrected = self.v / (1-self.eta_v_prod) # this is not present in the original MDNPN
 
         self.beta_mu = self.beta_mu + self.theta * np.sqrt(2*eta_mu-eta_mu**2) * x_tilde *self.h_mu 
-        self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(np.sqrt(self.v), a_min=self.epsilon, a_max=None)
+        self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(self.v, a_min=self.epsilon, a_max=None)
         self.h_mu = (1-eta_mu)*self.h_mu + x_tilde 
         self.h_v = (1-eta_v)*self.h_v + (x_tilde**2-1)
         return x_tilde, self.mu, sigma

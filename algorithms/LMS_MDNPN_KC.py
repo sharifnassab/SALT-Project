@@ -89,7 +89,7 @@ class MDNPN_KC():
         eta_v_correction_for_u = 1-self.eta_v_prod*(1-eta_v/2)
         self.eta_v_prod *= 1.0-eta_v
         
-        u = ( self.var + (eta_v/2)*((x-self.mu)**2 - self.var) ) / eta_v_correction_for_u
+        u = self.var + (eta_v/2)*((x-self.mu)**2 - self.var) / eta_v_correction_for_u
         self.var = self.var + eta_v*((x-self.mu)**2 - self.var) / (1-self.eta_v_prod) 
         sigma = np.clip(np.sqrt(u), a_min=self.epsilon, a_max=None)
         x_tilde = (x-self.mu) /  sigma
@@ -98,7 +98,7 @@ class MDNPN_KC():
         self.v = self.v + eta_v*((x_tilde**2-1)**2 - self.v) / (1-self.eta_v_prod) 
         
         self.beta_mu = self.beta_mu + self.theta * np.sqrt(2*eta_mu-eta_mu**2) * x_tilde *self.h_mu 
-        self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(np.sqrt(u2), a_min=self.epsilon, a_max=None)
+        self.beta_v = self.beta_v + self.theta * np.sqrt(2*eta_v-eta_v**2) * (x_tilde**2-1) *self.h_v  / np.clip(u2, a_min=self.epsilon, a_max=None)
         self.h_mu = (1-eta_mu)*self.h_mu + x_tilde 
         self.h_v = (1-eta_v)*self.h_v + (x_tilde**2-1) 
         return x_tilde, self.mu, sigma

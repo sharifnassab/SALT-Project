@@ -11,23 +11,23 @@ import csv
 import json
 
 
-csv_file = 'csvs/results_RSS1_.csv'
+csv_file = 'csvs/results_.csv'
 x_lim = None
 #x_lim = [1e-4,1]
 
 
 dataset_info = [
     {'name':'RSS1', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 22.5},
-    #{'name':'RSS5', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 27.0},
-    #{'name':'RSS6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 28.0},
-    #{'name':'RSS7', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 23.0},
-    #{'name':'ASH5', "dim":16, 'From':'900k', "To":"1.1m", "ylim_max": 43.0},
-    #{'name':'ASH6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 40.0},
-    #{'name':'ASH7', "dim":30, 'From':'900k', "To":"1.1m", "ylim_max": 50.0},
-    #{'name':'ASH9', "dim":1, 'From':'900k', "To":"1.1m", "ylim_max": 24.0},
-    ##{'name':'ASH10', "dim":5, 'From':'900k', "To":"1.1m"},
-    ##{'name':'ASH11', "dim":4, 'From':'900k', "To":"1.1m", "ylim_max": 100.0},
-    #{'name':'ASH12', "dim":5, 'From':'900k', "To":"1.1m", "ylim_max": 60.0},
+    {'name':'RSS5', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 27.0},
+    {'name':'RSS6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 28.0},
+    {'name':'RSS7', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 23.0},
+    {'name':'ASH5', "dim":16, 'From':'900k', "To":"1.1m", "ylim_max": 25.0},
+    {'name':'ASH6', "dim":20, 'From':'900k', "To":"1.1m", "ylim_max": 40.0},
+    {'name':'ASH7', "dim":30, 'From':'900k', "To":"1.1m", "ylim_max": 50.0},
+    {'name':'ASH9', "dim":1, 'From':'900k', "To":"1.1m", "ylim_max": 24.0},
+    #{'name':'ASH10', "dim":5, 'From':'900k', "To":"1.1m"},
+    #{'name':'ASH11', "dim":4, 'From':'900k', "To":"1.1m", "ylim_max": 100.0},
+    {'name':'ASH12', "dim":5, 'From':'900k', "To":"1.1m", "ylim_max": 60.0},
 ]
 
 
@@ -130,8 +130,8 @@ def distributed_legend(ax, curves, lines, y_max, legend_fontsize=13):
 
     # Handle out-of-bounds labels
     if out_of_bounds:
-        y_bottom, y_top = ax.ylim()
-        x_left, _ = ax.xlim()
+        y_bottom, y_top = ax.get_ylim()
+        x_left, _ = ax.get_xlim()
         vertical_spacing = (y_top - y_bottom) * 0.04
 
         for i, (label, color) in enumerate(out_of_bounds):

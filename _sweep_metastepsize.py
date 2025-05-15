@@ -10,8 +10,8 @@ from algorithms.IDBD_MGEN import param_sweeps as IDBD_MGEN_params
 from algorithms.Normalized_IDBD import param_sweeps as Normalized_IDBD_params
 
 
-#num_parallel_processes = 7
-num_parallel_processes = multiprocessing.cpu_count()-1
+num_parallel_processes = 3
+# num_parallel_processes = multiprocessing.cpu_count()-1
 
 ASH_dir = get_dir('ASH')
 RSS_dir = get_dir('RSS')
@@ -44,23 +44,23 @@ if __name__=='__main__':
                           list(10**(np.linspace(start=-7, stop=.5, num=int(7.5/.5) +1)))]
     
     dataset_list = [
-                    'SALTdata-RSS1-20-1100000.txt',
-                    #'SALTdata-RSS5-20-1100000.txt',
-                    #'SALTdata-RSS6-20-1100000.txt',
-                    #'SALTdata-RSS7-20-1100000.txt',
-                    #'SALTdata-ASH5-16-1100000.txt',
-                    #'SALTdata-ASH6-20-1100000.txt',
-                    #'SALTdata-ASH7-30-1100000.txt',
-                    #'SALTdata-ASH9-1-1100000.txt',
-                    #'SALTdata-ASH10-5-1100000.txt',
-                    #'SALTdata-ASH11-4-1100000.txt',
-                    #'SALTdata-ASH12-5-1100000.txt'
+                    #'SALTdata-RSS1-20-1100000.txt',
+                    'SALTdata-RSS5-20-1100000.txt',
+                    'SALTdata-RSS6-20-1100000.txt',
+                    'SALTdata-RSS7-20-1100000.txt',
+                    'SALTdata-ASH5-16-1100000.txt',
+                    'SALTdata-ASH6-20-1100000.txt',
+                    'SALTdata-ASH7-30-1100000.txt',
+                    'SALTdata-ASH9-1-1100000.txt',
+                    'SALTdata-ASH10-5-1100000.txt',
+                    'SALTdata-ASH11-4-1100000.txt',
+                    'SALTdata-ASH12-5-1100000.txt'
                     ]
 
     command_list = []
     for alg_params in [
                         IDBD_params(),
-                        IDBD2_params(),
+                        #IDBD2_params(),
                         IDBD_MGEN_params(),
                         Normalized_IDBD_params(),
                         ]:

@@ -35,12 +35,12 @@ def param_sweeps():
     for bias in ['True']:
         for gamma in [1.0]:
             for base_alg, base_alg_params_list, alpha0_list in [
-                                    ('LMS', [{}],[1e-7]),
-                                    #('LMS_SAN', [{}], [1e-5]),
-                                    ('LMS_EAN', [{'eta':.001}], [1e-5]),
-                                    ('LMS_MDN', [{'theta_MDN':.001, 'eta0':.001}], [1e-5]),
-                                    ('LMS_MDNa', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
-                                    ('LMS_MDNPN', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
+                                    # ('LMS', [{}],[1e-7]),
+                                    # #('LMS_SAN', [{}], [1e-5]),
+                                    # ('LMS_EAN', [{'eta':.001}], [1e-5]),
+                                    # ('LMS_MDN', [{'theta_MDN':.001, 'eta0':.001}], [1e-5]),
+                                    # ('LMS_MDNa', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
+                                    # ('LMS_MDNPN', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
                                     ('LMS_MDNPN_KC', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
                                     ]:
                 for base_alg_params in base_alg_params_list:
