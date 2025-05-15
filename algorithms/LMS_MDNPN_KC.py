@@ -94,7 +94,7 @@ class MDNPN_KC():
         sigma = np.clip(np.sqrt(u), a_min=self.epsilon, a_max=None)
         x_tilde = (x-self.mu) /  sigma
         self.mu = self.mu + eta_mu*(x-self.mu) /(1-self.eta_mu_prod) 
-        u2 = (self.v + (eta_v/2)*((x_tilde**2-1)**2 - self.v) ) / eta_v_correction_for_u
+        u2 = self.v + (eta_v/2)*((x_tilde**2-1)**2 - self.v) / eta_v_correction_for_u
         self.v = self.v + eta_v*((x_tilde**2-1)**2 - self.v) / (1-self.eta_v_prod) 
         
         self.beta_mu = self.beta_mu + self.theta * np.sqrt(2*eta_mu-eta_mu**2) * x_tilde *self.h_mu 
