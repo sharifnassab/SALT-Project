@@ -24,7 +24,7 @@ def param_sweeps():
     sweeps=[]
     for bias in ['True']:
             for eta0 in [.001]:
-                for theta_MDN in [1e-4, 1e-3, 1e-2]:
+                for theta_MDN in [1e-3, 1e-2]:
                     for alpha in [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]:
                         sweeps.append({
                                         'file_path':os.path.abspath(__file__),

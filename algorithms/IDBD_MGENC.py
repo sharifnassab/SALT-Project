@@ -14,13 +14,15 @@ from algorithms.LMS_MDNPN import MDNPN
 from algorithms.LMS_MDNPN_KC import MDNPN_KC
 
 
-alg_name =  'Normalized_IDBD' 
+alg_name =  'IDBD_MGENC' 
 base_alg = 'LMS_MDN'
 base_alg_params = {'theta_MDN':.001, 'eta0':.001} # {} {'theta_MDN':.001, 'eta':.001}
 
 alpha0 = 1e-4
 meta_stepsize = 1e-3
+meta_eta = 1e-3
 gamma = 1.0
+alpha_min = 1e-8
 
 
 bias = True
@@ -37,23 +39,28 @@ def param_sweeps():
                                     # ('LMS', [{}],[1e-7]),
                                     # #('LMS_SAN', [{}], [1e-5]),
                                     # ('LMS_EAN', [{'eta':.001}], [1e-5]),
-                                    # ('LMS_MDN', [{'theta_MDN':.001, 'eta0':.001}], [1e-5]),
+                                    #('LMS_MDN', [{'theta_MDN':.001, 'eta0':.001}], [1e-5]),
+                                    ('LMS_MDN', [{'theta_MDN':'theta_meta', 'eta0':.001}], [1e-5]),
+                                    ('LMS_MDN', [{'theta_MDN':'theta_meta/10', 'eta0':.001}], [1e-5]),
                                     # ('LMS_MDNa', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
                                     # ('LMS_MDNPN', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
-                                    ('LMS_MDNPN_KC', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
+                                    #('LMS_MDNPN_KC', [{'theta_MDN':.01, 'eta0':.001}], [1e-5]),
                                     ]:
                 for base_alg_params in base_alg_params_list:
-                    for meta_stepsize in [1e-4,1e-3,1e-2]:
-                        for alpha0 in alpha0_list:
-                            sweeps.append({
-                                            'file_path':os.path.abspath(__file__),
-                                            'base_alg':base_alg,
-                                            'base_alg_params':base_alg_params,
-                                            'alpha0':alpha0,
-                                            'meta_stepsize':meta_stepsize,
-                                            'gamma':gamma,
-                                            'bias':bias,
-                                            })
+                    for meta_eta in [1e-3]:
+                        for meta_stepsize in [1e-4,1e-3,1e-2]:
+                            for alpha0 in alpha0_list:
+                                sweeps.append({
+                                                'file_path':os.path.abspath(__file__),
+                                                'base_alg':base_alg,
+                                                'base_alg_params':base_alg_params,
+                                                'alpha0':alpha0,
+                                                'meta_stepsize':meta_stepsize,
+                                                'meta_eta':meta_eta,
+                                                'gamma':gamma,
+                                                'bias':bias,
+                                                'alpha_min':alpha_min,
+                                                })
     return sweeps
     #command_list = ['python3 IDBD.py ' + ' '.join([f'--{param}={config[param]}' for param in config]) for config in list_param_sweeps]
     #return command_list
@@ -68,8 +75,10 @@ alg_config={
             'alg_name':f'{base_alg}^{alg_name}',
             'params':{
                     'metastep':meta_stepsize,
+                    'meta_eta':meta_eta,
                     'alpha0':alpha0,
                     'base':base_alg_params,
+                    'alpha_min':alpha_min,
                     },
             'bias':bias,
             'model':('affine' if bias else 'linear'),
@@ -79,23 +88,32 @@ alg_config={
 
 class identity: step = staticmethod(lambda x: (x,None,None))
 
-def softmax(x):
-    exp_z = np.exp(x-np.median(x))  # median is substracted for numerical statibility and avoiding exp blow-up
-    return exp_z/exp_z.sum()
+
 
 if __name__ == "__main__":
     env, num_steps, d = data_loader(dataset)
     
-    
     wb = np.zeros([d+1 if bias else d])
+    if 'theta_MDN' in base_alg_params:
+        if  isinstance(base_alg_params['theta_MDN'], str):
+            tmp = base_alg_params['theta_MDN'].split('/')
+            if tmp[0] == 'theta_meta':
+                if len(tmp) == 1:
+                    theta_MDN = meta_stepsize+0.0
+                elif len(tmp) == 2:
+                    theta_MDN = (meta_stepsize)/float(tmp[1])
+            else: 
+                raise(ValueError)
+        else:
+            theta_MDN = base_alg_params['theta_MDN'] + 0.0
     input_normalizer = (
                         identity if base_alg=='LMS' else
                         SAN() if base_alg=='LMS_SAN' else
                         EAN(eta=base_alg_params['eta']) if base_alg=='LMS_EAN' else
-                        MDN(theta=base_alg_params['theta_MDN'], eta0=base_alg_params['eta0']) if base_alg=='LMS_MDN' else
-                        MDNa(theta=base_alg_params['theta_MDN'], eta0=base_alg_params['eta0']) if base_alg=='LMS_MDNa' else
-                        MDNPN(theta=base_alg_params['theta_MDN'], eta0=base_alg_params['eta0']) if base_alg=='LMS_MDNPN' else
-                        MDNPN_KC(theta=base_alg_params['theta_MDN'], eta0=base_alg_params['eta0']) if base_alg=='LMS_MDNPN_KC' else
+                        MDN(theta=theta_MDN, eta0=base_alg_params['eta0']) if base_alg=='LMS_MDN' else
+                        MDNa(theta=theta_MDN, eta0=base_alg_params['eta0']) if base_alg=='LMS_MDNa' else
+                        MDNPN(theta=theta_MDN, eta0=base_alg_params['eta0']) if base_alg=='LMS_MDNPN' else
+                        MDNPN_KC(theta=theta_MDN, eta0=base_alg_params['eta0']) if base_alg=='LMS_MDNPN_KC' else
                         0/0
                         )
     
@@ -104,16 +122,11 @@ if __name__ == "__main__":
     t = 0
 
     # initialize meta:
-    beta = np.zeros(wb.size+1) 
-    beta[-1] = np.log(wb.size)
-    alpha = softmax(beta)
-    alpha[-1] = 0
+    beta = np.log(alpha0) * np.ones_like(wb)
+    alpha = alpha0 * np.ones_like(wb)
     h = 0.0
-    clip0 = lambda x: np.clip(x, a_min=0.0, a_max=None) 
-    clip_eps = lambda x: np.clip(x, a_min=1e-8, a_max=None) 
-    N=0.0
-    meta_eta=1.0
-    prod_last_alpha=1.0
+    clip = lambda H: np.clip(H, a_min=0.0, a_max=None) 
+    meta_nu=0
 
     # main loop:
     for iteration in range(num_steps):
@@ -121,7 +134,7 @@ if __name__ == "__main__":
         
         try:
             x,z = env.next()
-            x_tilde, _, _ = input_normalizer.step(x)
+            x_tilde, mu, nu_sqrt = input_normalizer.step(x)
             xb = np.append(x_tilde,1) if bias else x_tilde
             
             y = (wb*xb).sum()
@@ -129,16 +142,16 @@ if __name__ == "__main__":
             MSE_list.append((y-z)**2)
 
             # meta update
-            N = N + (1-alpha[-1]) * (delta**2-N) 
-            prod_last_alpha *= alpha[-1]
-            N_corrected = N/(1-prod_last_alpha)   # this is absent in the original Normalized-IDBD
-            delta_tilde = delta / clip_eps(np.sqrt(N_corrected))
-            beta[:-1] = beta[:-1] + meta_stepsize * delta_tilde*xb*h * np.sqrt(2*alpha[:-1]-alpha[:-1]**2)
-            alpha = softmax(beta)
-            h = h * clip0(1-alpha[:-1]* xb**2) + delta_tilde*xb
-            
+            coeff_meta_nu = meta_eta/(1-(1-meta_eta)**t)
+            meta_grad = -delta*xb*h
+            meta_nu += coeff_meta_nu*(meta_grad**2-meta_nu)
+            beta = beta - meta_stepsize* meta_grad / (np.sqrt(meta_nu)+1e-8)
+            beta = np.clip(beta, a_min=np.log(alpha_min), a_max=None)
+            alpha = np.exp(beta)
+            h = h * (1-alpha*xb*xb) + alpha * delta*xb
+
             # base update
-            wb = wb + alpha[:-1] * delta_tilde*xb
+            wb = wb + alpha * delta*xb
 
             if np.isnan(wb).any(): break
         except:

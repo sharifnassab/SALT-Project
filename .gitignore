@@ -1,0 +1,10 @@
+# Ignore the __pycache__ directory (Python compiled files)
+__pycache__/
+utils/__pycache__/
+algorithms/__pycache__/
+
+
+# Ignore datasets
+data/
+
+

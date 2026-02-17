@@ -21,7 +21,7 @@ save_to='csvs/test.txt' + f'++{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
 def param_sweeps():
     sweeps=[]
     for bias in ['True']: # ['False', 'True']
-        for grad_normalizer_param in [.999]: # [.999, .99]
+        for grad_normalizer_param in [.99]: # [.999, .99]
             for momentum_param in [0.9]: #[0.0, 0.9]
                 for alpha in [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0]:
                     sweeps.append({

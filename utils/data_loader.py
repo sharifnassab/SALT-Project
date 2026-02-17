@@ -32,5 +32,8 @@ class env_laoded_from_CSV():
         y=self.Y[self.iter]
         self.iter+=1
         return x, y
+
+    def get_all_data_at_once(self):
+        return self.X, self.Y
     
 

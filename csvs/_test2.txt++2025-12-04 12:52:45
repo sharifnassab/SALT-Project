@@ -1,0 +1,1 @@
+LMS_MDN^SIDBD_ObnDe,affine,"{""metastep"": 0.001, ""alpha0"": 0.0001, ""base"": {""theta_MDN"": 0.001, ""eta0"": 0.001}, ""beta_inc_clip"": ""maxmin_0.1"", ""beta_clip"": ""maxmin_10"", ""meta_post_norm"": 0.99}",Arsalan,RSS7,20,1100000,,900k,1.1m,2025-12-04,,,,,,14.622,19.161,21.174,14.305,14.69,16.377,20.004,20.128,16.668,14.834,14.178

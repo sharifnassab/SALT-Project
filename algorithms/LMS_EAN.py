@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import numpy as np
-from utils.data_loader import data_loader
+from utils.data_loader_fast import data_loader
 from utils.sanitize_and_save import sanitize_and_save
 from datetime import datetime
 
@@ -21,7 +21,7 @@ save_to='csvs/test2.txt' + f'++{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
 def param_sweeps():
     sweeps=[]
     for bias in ['True']:
-            for eta in [.01, .001]:
+            for eta in [.001]:
                 for alpha in [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]:
                     sweeps.append({
                                     'file_path':os.path.abspath(__file__),
@@ -52,22 +52,30 @@ alg_config={
 
 
 class EAN():
-    def __init__(self, eta):
+    def __init__(self, eta, eta_v=None):
         self.var = 0.0
         self.t = 0
         self.epsilon = 1e-8
         self.eta = eta
+        if eta_v is None:
+            self.eta_v = eta
+        else:
+            self.eta_v = eta_v
 
     def step(self, x):
         self.t+=1
         if self.t==1:
+            self.one_minus_eta_to_the_t = 1.0-self.eta
+            self.one_minus_eta_v_to_the_t = 1.0-self.eta_v
             self.mu = x + 0.0
             mu = self.mu + 0.0
             sigma = self.epsilon * np.ones_like(x)
             x_tilde = np.zeros_like(x)
         else:
-            coeff_var = self.eta/(1-(1-self.eta)**(self.t-1))
-            coeff_mu = self.eta/(1-(1-self.eta)**self.t)
+            coeff_var = self.eta_v/(1-self.one_minus_eta_v_to_the_t)
+            self.one_minus_eta_v_to_the_t *= (1-self.eta_v)
+            self.one_minus_eta_to_the_t *= (1-self.eta)
+            coeff_mu = self.eta/(1-self.one_minus_eta_to_the_t)
             self.var = self.var + coeff_var*((x-self.mu)**2 - self.var) 
             mu = self.mu+0.0
             sigma = np.clip(np.sqrt(self.var), a_min=self.epsilon, a_max=None)
